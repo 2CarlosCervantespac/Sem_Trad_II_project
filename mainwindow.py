@@ -16,21 +16,20 @@ class MainWindow(QMainWindow):
 
 
     def clickLexico(self):
-        #tokens = [get_tokens(self.ui.plainTextEdit.toPlainText())]
         tokens = get_tokens(self.ui.plainTextEdit.toPlainText())
-        print(tokens)
-		# Limpiar la tabla
-        self.ui.tableWidget.clearContents()
-        self.ui.tableWidget.setRowCount(0)
+        self.ui.tableWidget.setColumnCount(3)
+        headers = ["Token", "Lexema", "#"]
+        self.ui.tableWidget.setHorizontalHeaderLabels(headers)
+        self.ui.tableWidget.setRowCount(len(self.tokens))
 
-        for i in range(len(tokens)):
+        row = 0
+        for i, token in enumerate(tokens):
+
+            self.ui.tableWidget.setItem(row, 0, QTableWidgetItem(token_types[token.type.value][1]))
+            self.ui.tableWidget.setItem(row, 1, QTableWidgetItem(token.lexema))
+            self.ui.tableWidget.setItem(row, 2, QTableWidgetItem(str(i + 1)))
             
-
-            row_pos = self.ui.tableWidget.rowCount()
-            self.ui.tableWidget.insertRow(0)
-            self.ui.tableWidget.setItem(0, 0, QTableWidgetItem(tokens[i].lexema))
-            self.ui.tableWidget.setItem(0, 1, QTableWidgetItem(token_types[tokens[i].type.value][1]))
-            self.ui.tableWidget.setItem(0, 2, QTableWidgetItem(str(tokens[i].type.value)))
+            row += 1
     
     def clickSintactico(self):
         return print('Sintactico')
