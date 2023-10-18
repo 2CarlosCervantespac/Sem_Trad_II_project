@@ -13,14 +13,25 @@ class MainWindow(QMainWindow):
         #Conexion xon los botones
         self.ui.pushButton.clicked.connect(self.clickLexico)
         self.ui.pushButton_2.clicked.connect(self.clickSintactico)
+        self.ui.tableWidget.setColumnCount(3)
+        self.ui.tableWidget.setHorizontalHeaderLabels(["Token", "Lexema", "#"])
 
 
     def clickLexico(self):
-        tokens = get_tokens(self.ui.plainTextEdit.toPlainText())
-        self.ui.tableWidget.setColumnCount(3)
-        headers = ["Token", "Lexema", "#"]
-        self.ui.tableWidget.setHorizontalHeaderLabels(headers)
-        self.ui.tableWidget.setRowCount(len(self.tokens))
+        input_text = self.ui.plainTextEdit.toPlainText()
+        tokens = get_tokens(input_text)
+
+        # Limpia la tabla
+        self.ui.tableWidget.setRowCount(0)
+
+        for i, token in enumerate(tokens):
+            row_pos = self.ui.tableWidget.rowCount()
+            self.ui.tableWidget.insertRow(row_pos)
+
+            # Muestra el lexema como el token
+            self.ui.tableWidget.setItem(row_pos, 0, QTableWidgetItem(token.lexema))
+            self.ui.tableWidget.setItem(row_pos, 1, QTableWidgetItem(token_types[token.type.value][1]))
+            self.ui.tableWidget.setItem(row_pos, 2, QTableWidgetItem(str(i + 1)))
 
         row = 0
         for i, token in enumerate(tokens):
