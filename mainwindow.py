@@ -1,9 +1,8 @@
-#from PySide6.QtWidgets import QMainWindow, QTableWidgetItem, QWidget, QVBoxLayout, QFont, QPlainTextEdit, QFontMetrics, QPushButton, QTableWidget
 from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from ui_mainwindow import Ui_MainWindow
 from lexico import token_types, get_tokens
-from sintactico import programa
+from sintactico import programa, mensajes
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -14,6 +13,9 @@ class MainWindow(QMainWindow):
         #Conexion xon los botones
         self.ui.pushButton.clicked.connect(self.clickLexico)
         self.ui.pushButton_2.clicked.connect(self.clickSintactico)
+        self.ui.actionOpen.triggered.connect(self.action_abrir_archivo)
+        self.ui.actionSave.triggered.connect(self.action_guardar_archivo)
+
         self.ui.tableWidget.setColumnCount(3)
         self.ui.tableWidget.setHorizontalHeaderLabels(["Token", "Lexema", "#"])
 
@@ -44,5 +46,79 @@ class MainWindow(QMainWindow):
             row += 1
     
     def clickSintactico(self):
+        #mensajes.clear()  # Limpia los mensajes previos
         programa(self.tokens)
-    
+        self.ui.plainTextEdit_2.clear()
+
+        # Concatena todos los mensajes en una cadena
+        mensajes_completos = "\n".join(mensajes)
+        self.ui.plainTextEdit_2.insertPlainText(mensajes_completos)
+        print(mensajes_completos)
+        print(mensajes)
+
+
+    def action_abrir_archivo(self):
+        ubicacion = QFileDialog.getOpenFileName(
+            self,
+            'Abrir Archivo',
+            '.',
+            'TXT (*.txt)'
+        )[0]
+
+        if ubicacion:
+            try:
+                with open(ubicacion, 'r', encoding='utf-8') as archivo:
+                    texto = archivo.read()
+                    self.ui.plainTextEdit.setPlainText(texto)  # Establece el texto en el QPlainTextEdit
+
+                QMessageBox.information(
+                    self,
+                    "Éxito",
+                    f"El archivo se abrió correctamente: {ubicacion}"
+                )
+            except Exception as e:
+                QMessageBox.critical(
+                    self,
+                    "Error",
+                    f"No se pudo abrir el archivo: {str(e)}"
+                )
+        else:
+            QMessageBox.critical(
+                self,
+                "Error",
+                "No se seleccionó un archivo válido para abrir."
+            )
+
+
+    def action_guardar_archivo(self):
+        ubicacion = QFileDialog.getSaveFileName(
+            self,
+            'Guardar Archivo',
+            '.',
+            'TXT (*.txt)'
+        )[0]
+
+        if ubicacion:  # Verifica si se seleccionó una ubicación válida
+            texto_a_guardar = self.ui.plainTextEdit.toPlainText()  # Obtiene el texto del plainTextEdit
+
+            try:
+                with open(ubicacion, 'w', encoding='utf-8') as archivo:
+                    archivo.write(texto_a_guardar)
+
+                QMessageBox.information(
+                    self,
+                    "Éxito",
+                    f"El archivo de texto se guardó en: {ubicacion}"
+                )
+            except Exception as e:
+                QMessageBox.critical(
+                    self,
+                    "Error",
+                    f"No se pudo guardar el archivo de texto en {ubicacion}: {str(e)}"
+                )
+        else:
+            QMessageBox.critical(
+                self,
+                "Error",
+                "No se seleccionó una ubicación válida para guardar el archivo de texto."
+            )

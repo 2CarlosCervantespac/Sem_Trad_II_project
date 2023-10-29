@@ -1,3 +1,5 @@
+mensajes = []
+
 def programa(tokens):
     i = 0
 
@@ -27,11 +29,11 @@ def palabraIf(tokens, i):
             i += 1
             parantesisAbre(tokens, i)
         else:
-            print("Sintax error: Error en el 'if' \n"
-                  "<CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } ")
+            mensaje = "Sintax error: Error en el 'if'\n<CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
+            mensajes.append(mensaje)
     except:
-        print("Sintax error: Error en el 'if' \n"
-                  "<CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } ")
+        mensaje = "Sintax error: Error en el 'if'\n<CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
+        mensajes.append(mensaje)
 
 def parantesisAbre(tokens, i, instruccion = 0):
     try:
@@ -41,8 +43,8 @@ def parantesisAbre(tokens, i, instruccion = 0):
                 i = comparacion(tokens, i)              #Revisar la comparacion
                 parentesisCierra(tokens, i)
             else:
-                print("Sintax error: Error en el '(' \n"
-                    "<CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } ")
+                mensaje = "Sintax error: Error en el '('  \n <CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
+                mensajes.append(mensaje)
         if instruccion == 1:
             parentesisCierra(tokens, i)
         elif instruccion == 1:                      #Funcion
@@ -50,24 +52,24 @@ def parantesisAbre(tokens, i, instruccion = 0):
             parentesisCierra(tokens, i)
             
     except:
-        print("Sintax error: Error en el '(' \n"
-                  "<CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } ")
+        mensaje = "Sintax error: Error en el '('  <CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
+        mensajes.append(mensaje)
 
 def comparacion(tokens, i):
     i = operador(tokens, i)                     #Valida el operador
     if i == -1:
-        print("Sintax error: Error en el operador \n"
-                  "<COMPARACION> -> <OPERADOR> <OP_COMPARACION> <OPERADOR> ")
+        mensaje = "Sintax error: Error en el operador <COMPARACION> -> <OPERADOR> <OP_COMPARACION> <OPERADOR> "
+        mensajes.append(mensaje)
     else:
         i = opComparacion(tokens, i)
         if i == -1:
-            print("Sintax error: Error en el operador de comparacion \n"
-                    "<COMPARACION> -> <OPERADOR> <OP_COMPARACION> <OPERADOR> ")
+            mensaje = "Sintax error: Error en el operador de comparacion <COMPARACION> -> <OPERADOR> <OP_COMPARACION> <OPERADOR> "
+            mensajes.append(mensaje)
         else:
             i = operador(tokens, i)
             if i == -1:
-                print("Sintax error: Error en el operador de comparacion \n"
-                        "<COMPARACION> -> <OPERADOR> <OP_COMPARACION> <OPERADOR> ")
+                mensaje = "Sintax error: Error en el operador de comparacion \n<COMPARACION> -> <OPERADOR> <OP_COMPARACION> <OPERADOR> "
+                mensajes.append(mensaje)
             else:
                 return i
 
@@ -110,11 +112,11 @@ def parentesisCierra(tokens, i):
             i += 1
             llaveAbre(tokens, i)              #Revisar la comparacion
         else:
-            print("Sintax error: Error en el ')' \n"
-                  "<CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } ")
+            mensaje = "Sintax error: Error en el ')' \n<CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
+            mensajes.append(mensaje)
     except:
-        print("Sintax error: Error en el ')' \n"
-                  "<CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } ")
+        mensaje = "Sintax error: Error en el ')' \n<CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
+        mensajes.append(mensaje)
         
 def llaveAbre(tokens, i):
     try:
@@ -123,24 +125,25 @@ def llaveAbre(tokens, i):
             i = instruccion(tokens, i)
             llaveCierra(tokens, i)
         else:
-            print("Sintax error: Error en el '{' \n"
-                  "<CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } ")
+            mensaje = "Sintax error: Error en el '{' \n <CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
+            mensajes.append(mensaje)
     except:
-        print("Sintax error: Error en el '{' \n"
-                  "<CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } ")
+        mensaje = "Sintax error: Error en el '{' \n <CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
+        mensajes.append(mensaje)
 
 def llaveCierra(tokens, i):
     try:
-        if tokens[i].type.value == 43:          #Valor definido en el lexico para }
+        if tokens[i].type.value == 43:  # Valor definido en el léxico para }
             i += 1
-            print("Syntax analysis completed with no errors \n Process finished with exit code 0")
+            mensaje = "Syntax analysis completed with no errors \nProcess finished with exit code 0"
+            mensajes.append(mensaje)
             return i
         else:
-            print("Sintax error: Error en el '}' \n"
-                  "<CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } ")
+            mensaje = "Sintax error: Error en el '}' \n<CONDICION> -> if ( <COMPARACION> ) { <ORDENES> }"
+            mensajes.append(mensaje)
     except:
-        print("Sintax error: Error en el '}' \n"
-                  "<CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } ")
+        mensaje = "Sintax error: Error en el '}' \n<CONDICION> -> if ( <COMPARACION> ) { <ORDENES> }"
+        mensajes.append(mensaje)
 
 #Proceso de asignacion
 def asignacion(tokens, i):
@@ -153,9 +156,11 @@ def simboloAsignacion(tokens, i):
             i += 1
             valorEntero(tokens, i)
         else:
-            print("Sintax error: Error en el '=' \n <ASIGNACION> -> <IDENTIFICADOR> = <VALOR_ENTERO> ;")
+            mensaje = "Sintax error: Error en el '=' \n <ASIGNACION> -> <IDENTIFICADOR> = <VALOR_ENTERO> ;"
+            mensajes.append(mensaje)
     except:
-        print("Sintax error: Error en el '=' \n <ASIGNACION> -> <IDENTIFICADOR> = <VALOR_ENTERO> ;")
+        mensaje = "Sintax error: Error en el '=' \n <ASIGNACION> -> <IDENTIFICADOR> = <VALOR_ENTERO> ;"
+        mensajes.append(mensaje)
 
 def valorEntero(tokens, i):
     try:
@@ -163,9 +168,11 @@ def valorEntero(tokens, i):
             i += 1
             puntoComa(tokens, i)                #Valida que haya ;
         else:
-            print("Sintax error: Error en el <VALOR_ENTERO> \n <ASIGNACION> -> <IDENTIFICADOR> = <VALOR_ENTERO> ;")
+            mensaje = "Sintax error: Error en el <VALOR_ENTERO> \n <ASIGNACION> -> <IDENTIFICADOR> = <VALOR_ENTERO> ;"
+            mensajes.append(mensaje)
     except:
-        print("Sintax error: Error en el <VALOR_ENTERO> \n <ASIGNACION> -> <IDENTIFICADOR> = <VALOR_ENTERO> ;")
+        mensaje = "Sintax error: Error en el <VALOR_ENTERO> \n <ASIGNACION> -> <IDENTIFICADOR> = <VALOR_ENTERO> ;"
+        mensajes.append(mensaje)
 
 #Proceso de declaracion
 def declaracion(tokens, i):        #Valida la declaracion
@@ -187,9 +194,11 @@ def tipo(tokens, i):
             i = identificador(tokens, i)            #Valida que sea un identificador
             return i
         else:
-            print("Sintax error: Error en el tipo \n <DECLARACION> -> <TIPO> <IDENTIFICADOR> ;")
+           mensaje = "Sintax error: Error en el tipo \n <DECLARACION> -> <TIPO> <IDENTIFICADOR> ;"
+           mensajes.append(mensaje)
     except:
-        print("Sintax error: Error en el tipo \n <DECLARACION> -> <TIPO> <IDENTIFICADOR> ;")
+        mensaje = "Sintax error: Error en el tipo \n <DECLARACION> -> <TIPO> <IDENTIFICADOR> ;"
+        mensajes.append(mensaje)
 
 def identificador(tokens, i, instruccion = 0):
     try:
@@ -206,11 +215,14 @@ def identificador(tokens, i, instruccion = 0):
                     i = parantesisAbre(tokens, i, 1)
                     return i
                 else:
-                    print("Sintax error: Error en el identificador \n <DECLARACION> -> <TIPO> <IDENTIFICADOR> ;")
+                    mensaje = "Sintax error: Error en el identificador \n <DECLARACION> -> <TIPO> <IDENTIFICADOR> ;"
+                    mensajes.append(mensaje)
         else:
-            print("Sintax error: Error en el identificador \n <DECLARACION> -> <TIPO> <IDENTIFICADOR> ;")
+            mensaje = "Sintax error: Error en el identificador \n <DECLARACION> -> <TIPO> <IDENTIFICADOR> ;"
+            mensajes.append(mensaje)
     except:
-        print("Sintax error: Error en el identificador \n <DECLARACION> -> <TIPO> <IDENTIFICADOR> ;")
+        mesnaje = "Sintax error: Error en el identificador \n <DECLARACION> -> <TIPO> <IDENTIFICADOR> ;"
+        mensajes.append(mensaje)
 
 def puntoComa(tokens, i):
     try:
@@ -218,6 +230,8 @@ def puntoComa(tokens, i):
             i += 1
             return i
         else:
-            print("Sintax error: Error en el ';' ")
+            mensaje = "Sintax error: Error en el ';' "
+            mensajes.append(mensaje)
     except:
-        print("Sintax error: Error en el ';' ")
+        mensaje = "Sintax error: Error en el ';' "
+        mensajes.append(mensaje)
