@@ -2,58 +2,188 @@ mensajes = []
 
 def programa(tokens):
     i = 0
-
-    condicion(tokens, i)
+    if tokens[i].type.value == 14:          #Valor definido en el lexico para if
+        i += 1                              #Avanzamos i a la siguiente posicion del arreglo de Tokens
+        condicion(tokens, i)
+    elif tokens[i].type.value == 4:         #Valor definido en el lexico para el char
+        valor = 4                            #Tipo de dato que necesita
+        i += 1
+        identificador(tokens, i, valor)            #Valida que sea un identificador
+    elif tokens[i].type.value == 6:         #Valor definido en el lexico para el int
+        valor = 6
+        i += 1
+        identificador(tokens, i, valor)            #Valida que sea un identificador
+    elif tokens[i].type.value == 8:         #Valor definido en el lexico para el float
+        valor = 8
+        i += 1
+        identificador(tokens, i, valor)            #Valida que sea un identificador
+    else:
+        mensaje = "Sintax error: Error instruccion invalida "
+        mensajes.append(mensaje)
     #i = declaracion(tokens, i)
     #if len(tokens) != i+1:
     #    i = asignacion(tokens, i)
 
-#Proceso funcion
-def funcion(tokens, i):
-    i = declaracion(tokens, i, 2)
 
-def instruccion(tokens, i, instruccion = 0):
-    if instruccion == 0:
-        i = declaracion(tokens, i)            #Condicion
-        return i
-    elif instruccion == 1:                  
-        i = condicion(tokens, i)      
+def identificador(tokens, i, valor = 0):
+    try:
+        if tokens[i].type.value == 50:          #Valor definido en el lexico para el identificador
+            i += 1
+            if llaveAbre(tokens, i):            #Si es una llave es una función
+                i += 1
+                if parentesisCierra(tokens, i):
+                    i += 1                          #Avanzamos i a la siguiente posicion del arreglo de Tokens
+                    if llaveAbre(tokens, i):
+                        i += 1                      #Avanzamos i a la siguiente posicion del arreglo de Tokens
+                        if llaveCierra(tokens, i):
+                            mensaje = "Syntax analysis completed with no errors \nProcess finished with exit code 0"
+                            mensajes.append(mensaje)
+                        else:
+                            mensaje = "Sintax error: Error en el '}' \n<CONDICION> -> if ( <COMPARACION> ) { <ORDENES> }"
+                            mensajes.append(mensaje) 
+                    else:
+                        mensaje = "Sintax error: Error en el '{' \n <CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
+                        mensajes.append(mensaje)
+                else:
+                    mensaje = "Sintax error: Error en el ')' \n<CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
+                    mensajes.append(mensaje)
+            elif simboloAsignacion(tokens, i):     #Si es un = es una asignacion y declaracion
+                i += 1
+                tipo(tokens, i, valor)
+            elif puntoComa(tokens, i):             #Si es un ; es una declaracion
+                mensaje = "Syntax analysis completed with no errors \nProcess finished with exit code 0"
+                mensajes.append(mensaje)
+            else:
+                mensaje = "Sintax error: Error en el ';' "
+                mensajes.append(mensaje)
+        else:
+            mensaje = "Sintax error: Error en el identificador"
+            mensajes.append(mensaje)
+    except:
+        mesnaje = "Sintax error: Error en el identificador"
+        mensajes.append(mensaje)
+
+def simboloAsignacion(tokens, i):
+    try:
+        if tokens[i].type.value == 40:       #Valor definido en el lexico para =
+            return True
+        else:
+            return False
+    except:
+        return False
+    
+def tipo(tokens, i, valor):
+    try:
+        if valor == 4:                       #Valor definido en el lexico para el char
+            i += 1
+            if puntoComa(tokens, i):        #Valida que haya punto y coma
+                mensaje = "Syntax analysis completed with no errors \nProcess finished with exit code 0"
+                mensajes.append(mensaje)
+            else: 
+                mensaje = "Sintax error: Error en el ; \n <CHAR> <IDENTIFICADOR> = ' <CARACTER> ' ;"
+                mensajes.append(mensaje)
+        elif valor == 6:         #Valor definido en el lexico para el int
+            if tokens[i].type.value == 51:            #Valor definido en el lexico para numeros enteros
+                i += 1
+                if puntoComa(tokens, i):        #Valida que haya punto y coma
+                    mensaje = "Syntax analysis completed with no errors \nProcess finished with exit code 0"
+                    mensajes.append(mensaje)
+                else: 
+                    mensaje = "Sintax error: Error en el ; \n <INT> <IDENTIFICADOR> = ' <ENTERO> ' ;"
+                    mensajes.append(mensaje)
+            else:
+                mensaje = "Sintax error: Error en el tipo \n <INT> <IDENTIFICADOR> = ' <ENTERO> ' ;"
+                mensajes.append(mensaje)
+        elif valor == 8:         #Valor definido en el lexico para el float
+            if tokens[i].type.value == 52:            #Valor definido en el lexico para numeros flotantes
+                i += 1
+                if puntoComa(tokens, i):        #Valida que haya punto y coma
+                    mensaje = "Syntax analysis completed with no errors \nProcess finished with exit code 0"
+                    mensajes.append(mensaje)
+                else: 
+                    mensaje = "Sintax error: Error en el ; \n <FLOAT> <IDENTIFICADOR> = ' <FLOTANTE> ' ;"
+                    mensajes.append(mensaje)
+            else:
+                mensaje = "Sintax error: Error en el tipo \n <FLOAT> <IDENTIFICADOR> = ' <FLOTANTE> ' ;"
+                mensajes.append(mensaje)
+        else:
+            mensaje = "Sintax error: Error en el tipo \n <TIPO> <IDENTIFICADOR> = <VALOR> ;"
+            mensajes.append(mensaje)
+    except:
+        mensaje = "Sintax error: Error en el tipo \n <DECLARACION> -> <TIPO> <IDENTIFICADOR> ;"
+        mensajes.append(mensaje)
+
 
 #Proceso de condicion
 def condicion(tokens, i):
-    palabraIf(tokens, i)
-
-def palabraIf(tokens, i):
-    try:
-        if tokens[i].type.value == 14:       #Valor definido en el lexico para if
-            i += 1
-            parantesisAbre(tokens, i)
-        else:
-            mensaje = "Sintax error: Error en el 'if'\n<CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
-            mensajes.append(mensaje)
-    except:
-        mensaje = "Sintax error: Error en el 'if'\n<CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
-        mensajes.append(mensaje)
-
-def parantesisAbre(tokens, i, instruccion = 0):
-    try:
-        if instruccion == 0:                        #Comparacion
-            if tokens[i].type.value == 44:          #Valor definido en el lexico para (
-                i += 1
-                i = comparacion(tokens, i)              #Revisar la comparacion
-                parentesisCierra(tokens, i)
+    if parantesisAbre(tokens, i):
+        i += 1                              #Avanzamos i a la siguiente posicion del arreglo de Tokens
+        i = comparacion(tokens, i)
+        if parentesisCierra(tokens, i):
+            i += 1                          #Avanzamos i a la siguiente posicion del arreglo de Tokens
+            if llaveAbre(tokens, i):
+                i += 1                      #Avanzamos i a la siguiente posicion del arreglo de Tokens
+                if llaveCierra(tokens, i):
+                    mensaje = "Syntax analysis completed with no errors \nProcess finished with exit code 0"
+                    mensajes.append(mensaje)
+                else:
+                    mensaje = "Sintax error: Error en el '}' \n<CONDICION> -> if ( <COMPARACION> ) { <ORDENES> }"
+                    mensajes.append(mensaje) 
             else:
-                mensaje = "Sintax error: Error en el '('  \n <CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
+                mensaje = "Sintax error: Error en el '{' \n <CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
                 mensajes.append(mensaje)
-        if instruccion == 1:
-            parentesisCierra(tokens, i)
-        elif instruccion == 1:                      #Funcion
-            i += 1
-            parentesisCierra(tokens, i)
-            
-    except:
-        mensaje = "Sintax error: Error en el '('  <CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
+        else:
+            mensaje = "Sintax error: Error en el ')' \n<CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
+            mensajes.append(mensaje)
+    else:
+        mensaje = "Sintax error: Error en el '('  \n <CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
         mensajes.append(mensaje)
+        
+
+def puntoComa(tokens, i):
+    try:
+        if tokens[i].type.value == 49:       #Valor definido en el lexico para el ;
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def llaveAbre(tokens, i):
+    try:
+        if tokens[i].type.value == 42:          #Valor definido en el lexico para {
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def llaveCierra(tokens, i):
+    try:
+        if tokens[i].type.value == 43:  # Valor definido en el léxico para }
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def parantesisAbre(tokens, i):
+    try:
+        if tokens[i].type.value == 44:          #Valor definido en el lexico para (
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def parentesisCierra(tokens, i):
+    try:
+        if tokens[i].type.value == 45:          #Valor definido en el lexico para )
+            return True
+        else:
+            return False
+    except:
+        return False
 
 def comparacion(tokens, i):
     i = operador(tokens, i)                     #Valida el operador
@@ -106,62 +236,6 @@ def opComparacion(tokens, i):
         return -1
 
 
-def parentesisCierra(tokens, i):
-    try:
-        if tokens[i].type.value == 45:          #Valor definido en el lexico para )
-            i += 1
-            llaveAbre(tokens, i)              #Revisar la comparacion
-        else:
-            mensaje = "Sintax error: Error en el ')' \n<CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
-            mensajes.append(mensaje)
-    except:
-        mensaje = "Sintax error: Error en el ')' \n<CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
-        mensajes.append(mensaje)
-        
-def llaveAbre(tokens, i):
-    try:
-        if tokens[i].type.value == 42:          #Valor definido en el lexico para {
-            i += 1
-            i = instruccion(tokens, i)
-            llaveCierra(tokens, i)
-        else:
-            mensaje = "Sintax error: Error en el '{' \n <CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
-            mensajes.append(mensaje)
-    except:
-        mensaje = "Sintax error: Error en el '{' \n <CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
-        mensajes.append(mensaje)
-
-def llaveCierra(tokens, i):
-    try:
-        if tokens[i].type.value == 43:  # Valor definido en el léxico para }
-            i += 1
-            mensaje = "Syntax analysis completed with no errors \nProcess finished with exit code 0"
-            mensajes.append(mensaje)
-            return i
-        else:
-            mensaje = "Sintax error: Error en el '}' \n<CONDICION> -> if ( <COMPARACION> ) { <ORDENES> }"
-            mensajes.append(mensaje)
-    except:
-        mensaje = "Sintax error: Error en el '}' \n<CONDICION> -> if ( <COMPARACION> ) { <ORDENES> }"
-        mensajes.append(mensaje)
-
-#Proceso de asignacion
-def asignacion(tokens, i):
-    i += 1
-    i = identificador(tokens, i, 1)
-
-def simboloAsignacion(tokens, i):
-    try:
-        if tokens[i].type.value == 40:       #Valor definido en el lexico para =
-            i += 1
-            valorEntero(tokens, i)
-        else:
-            mensaje = "Sintax error: Error en el '=' \n <ASIGNACION> -> <IDENTIFICADOR> = <VALOR_ENTERO> ;"
-            mensajes.append(mensaje)
-    except:
-        mensaje = "Sintax error: Error en el '=' \n <ASIGNACION> -> <IDENTIFICADOR> = <VALOR_ENTERO> ;"
-        mensajes.append(mensaje)
-
 def valorEntero(tokens, i):
     try:
         if tokens[i].type.value == 51:       #Valor definido en el lexico para numero entero
@@ -178,60 +252,3 @@ def valorEntero(tokens, i):
 def declaracion(tokens, i):        #Valida la declaracion
     i = tipo(tokens, i)
     return i
-
-def tipo(tokens, i):
-    try:
-        if tokens[i].type.value == 4:           #Valor definido en el lexico para el char
-            i += 1
-            i = identificador(tokens, i)            #Valida que sea un identificador
-            return i
-        elif tokens[i].type.value == 6:         #Valor definido en el lexico para el int
-            i += 1
-            i = identificador(tokens, i)            #Valida que sea un identificador
-            return i
-        elif tokens[i].type.value == 8:         #Valor definido en el lexico para el float
-            i += 1
-            i = identificador(tokens, i)            #Valida que sea un identificador
-            return i
-        else:
-           mensaje = "Sintax error: Error en el tipo \n <DECLARACION> -> <TIPO> <IDENTIFICADOR> ;"
-           mensajes.append(mensaje)
-    except:
-        mensaje = "Sintax error: Error en el tipo \n <DECLARACION> -> <TIPO> <IDENTIFICADOR> ;"
-        mensajes.append(mensaje)
-
-def identificador(tokens, i, instruccion = 0):
-    try:
-        if tokens[i].type.value == 50:          #Valor definido en el lexico para el identificador
-                if instruccion == 0:                        #Declaracion
-                    i += 1
-                    i = puntoComa(tokens, i)                #Valida que haya ;
-                    return i
-                elif instruccion == 1:                      #Asiganacion
-                    i += 1
-                    i = simboloAsignacion(tokens, i)
-                elif instruccion == 2:                      #Funcion
-                    i += 1
-                    i = parantesisAbre(tokens, i, 1)
-                    return i
-                else:
-                    mensaje = "Sintax error: Error en el identificador \n <DECLARACION> -> <TIPO> <IDENTIFICADOR> ;"
-                    mensajes.append(mensaje)
-        else:
-            mensaje = "Sintax error: Error en el identificador \n <DECLARACION> -> <TIPO> <IDENTIFICADOR> ;"
-            mensajes.append(mensaje)
-    except:
-        mesnaje = "Sintax error: Error en el identificador \n <DECLARACION> -> <TIPO> <IDENTIFICADOR> ;"
-        mensajes.append(mensaje)
-
-def puntoComa(tokens, i):
-    try:
-        if tokens[i].type.value == 49:       #Valor definido en el lexico para el ;
-            i += 1
-            return i
-        else:
-            mensaje = "Sintax error: Error en el ';' "
-            mensajes.append(mensaje)
-    except:
-        mensaje = "Sintax error: Error en el ';' "
-        mensajes.append(mensaje)
