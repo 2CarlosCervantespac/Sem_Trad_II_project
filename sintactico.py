@@ -1,43 +1,98 @@
 mensajes = []
 
+def finPrograma(tokens, i):
+    if i+1 >= len(tokens):
+        return True
+    return False
+
 def programa(tokens):
     i = 0
+    instruccion(tokens, i)
+    
+def instruccion(tokens, i):
     if tokens[i].type.value == 14:          #Valor definido en el lexico para if
         i += 1                              #Avanzamos i a la siguiente posicion del arreglo de Tokens
-        condicion(tokens, i)
+        i = condicion(tokens, i)
     elif tokens[i].type.value == 4:         #Valor definido en el lexico para el char
         valor = 4                            #Tipo de dato que necesita
         i += 1
-        identificador(tokens, i, valor)            #Valida que sea un identificador
+        i = identificador(tokens, i, valor)            #Valida que sea un identificador
     elif tokens[i].type.value == 6:         #Valor definido en el lexico para el int
         valor = 6
         i += 1
-        identificador(tokens, i, valor)            #Valida que sea un identificador
+        i = identificador(tokens, i, valor)            #Valida que sea un identificador
     elif tokens[i].type.value == 8:         #Valor definido en el lexico para el float
         valor = 8
         i += 1
-        identificador(tokens, i, valor)            #Valida que sea un identificador
+        i = identificador(tokens, i, valor)            #Valida que sea un identificador
+    elif tokens[i].type.value == 55:         #Valor definido en el lexico para el float
+        i = palabraPrint(tokens, i)            #Valida que sea un identificador
     else:
         mensaje = "Sintax error: Error instruccion invalida "
-        mensajes.append(mensaje)
-    #i = declaracion(tokens, i)
-    #if len(tokens) != i+1:
-    #    i = asignacion(tokens, i)
+        mensajes.append(mensaje) 
+    print(i)
+    return i
 
+# -------- Instruccion print --------
+def palabraPrint(tokens, i):
+    try:
+        if tokens[i].type.value == 55:          #Valor definido en el lexico para el identificador
+            i += 1
+            if parantesisAbre(tokens, i):            #Si es una llave es una función
+                i += 1
+                if cadena(tokens, i):
+                    i+= 1
+                    if parentesisCierra(tokens, i):
+                        i += 1
+                        if puntoComa(tokens, i):
+                            if finPrograma(tokens, i):
+                                mensaje = "Syntax analysis completed with no errors \nProcess finished with exit code 0"
+                                mensajes.append(mensaje)
+                            else:
+                                return i
+                        else:
+                            mensaje = "Sintax error: Error en la instruccion print \n<PRINT> -> print ( <CADENA> ) ;"
+                            mensajes.append(mensaje)
+                    else:
+                        mensaje = "Sintax error: Error en la cadena \n<PRINT> -> print ( <CADENA> ) ;"
+                        mensajes.append(mensaje)
+                else:
+                    mensaje = "Sintax error: Error en el ')' \n<PRINT> -> print ( <CADENA> ) ;"
+                    mensajes.append(mensaje)
+            else:
+                mensaje = "Sintax error: Error en el '(' \n<PRINT> -> print ( <CADENA> ) ;"
+                mensajes.append(mensaje)
+    except:
+        mensaje = "Sintax error: Error en la instruccion print \n<PRINT> -> print ( <CADENA> ) ;"
+        mensajes.append(mensaje)
+
+def cadena(tokens, i):
+    try:
+        if tokens[i].type.value == 53:          #Valor definido en el lexico para la cadena
+            return True
+        else:
+            return False
+    except:
+        return False
 
 def identificador(tokens, i, valor = 0):
     try:
         if tokens[i].type.value == 50:          #Valor definido en el lexico para el identificador
             i += 1
-            if llaveAbre(tokens, i):            #Si es una llave es una función
+            if parantesisAbre(tokens, i):            #Si es una llave es una función
                 i += 1
                 if parentesisCierra(tokens, i):
                     i += 1                          #Avanzamos i a la siguiente posicion del arreglo de Tokens
                     if llaveAbre(tokens, i):
                         i += 1                      #Avanzamos i a la siguiente posicion del arreglo de Tokens
+                        i = instruccion(tokens, i)
+                        i += 1
                         if llaveCierra(tokens, i):
-                            mensaje = "Syntax analysis completed with no errors \nProcess finished with exit code 0"
-                            mensajes.append(mensaje)
+                            if finPrograma(tokens, i):
+                                mensaje = "Syntax analysis completed with no errors \nProcess finished with exit code 0"
+                                mensajes.append(mensaje)
+                            else:
+                                return i
                         else:
                             mensaje = "Sintax error: Error en el '}' \n<CONDICION> -> if ( <COMPARACION> ) { <ORDENES> }"
                             mensajes.append(mensaje) 
@@ -49,10 +104,14 @@ def identificador(tokens, i, valor = 0):
                     mensajes.append(mensaje)
             elif simboloAsignacion(tokens, i):     #Si es un = es una asignacion y declaracion
                 i += 1
-                tipo(tokens, i, valor)
+                i = tipo(tokens, i, valor)
+                return i
             elif puntoComa(tokens, i):             #Si es un ; es una declaracion
-                mensaje = "Syntax analysis completed with no errors \nProcess finished with exit code 0"
-                mensajes.append(mensaje)
+                if finPrograma(tokens, i):
+                    mensaje = "Syntax analysis completed with no errors \nProcess finished with exit code 0"
+                    mensajes.append(mensaje)
+                else:
+                    return i
             else:
                 mensaje = "Sintax error: Error en el ';' "
                 mensajes.append(mensaje)
@@ -60,7 +119,7 @@ def identificador(tokens, i, valor = 0):
             mensaje = "Sintax error: Error en el identificador"
             mensajes.append(mensaje)
     except:
-        mesnaje = "Sintax error: Error en el identificador"
+        mensaje = "Sintax error: Error en el identificador"
         mensajes.append(mensaje)
 
 def simboloAsignacion(tokens, i):
@@ -77,8 +136,11 @@ def tipo(tokens, i, valor):
         if valor == 4:                       #Valor definido en el lexico para el char
             i += 1
             if puntoComa(tokens, i):        #Valida que haya punto y coma
-                mensaje = "Syntax analysis completed with no errors \nProcess finished with exit code 0"
-                mensajes.append(mensaje)
+                if finPrograma(tokens, i):
+                    mensaje = "Syntax analysis completed with no errors \nProcess finished with exit code 0"
+                    mensajes.append(mensaje)
+                else:
+                    return i
             else: 
                 mensaje = "Sintax error: Error en el ; \n <CHAR> <IDENTIFICADOR> = ' <CARACTER> ' ;"
                 mensajes.append(mensaje)
@@ -86,8 +148,11 @@ def tipo(tokens, i, valor):
             if tokens[i].type.value == 51:            #Valor definido en el lexico para numeros enteros
                 i += 1
                 if puntoComa(tokens, i):        #Valida que haya punto y coma
-                    mensaje = "Syntax analysis completed with no errors \nProcess finished with exit code 0"
-                    mensajes.append(mensaje)
+                    if finPrograma(tokens, i):
+                        mensaje = "Syntax analysis completed with no errors \nProcess finished with exit code 0"
+                        mensajes.append(mensaje)
+                    else:
+                        return i
                 else: 
                     mensaje = "Sintax error: Error en el ; \n <INT> <IDENTIFICADOR> = ' <ENTERO> ' ;"
                     mensajes.append(mensaje)
@@ -98,8 +163,11 @@ def tipo(tokens, i, valor):
             if tokens[i].type.value == 52:            #Valor definido en el lexico para numeros flotantes
                 i += 1
                 if puntoComa(tokens, i):        #Valida que haya punto y coma
-                    mensaje = "Syntax analysis completed with no errors \nProcess finished with exit code 0"
-                    mensajes.append(mensaje)
+                    if finPrograma(tokens, i):
+                        mensaje = "Syntax analysis completed with no errors \nProcess finished with exit code 0"
+                        mensajes.append(mensaje)
+                    else:
+                        return i
                 else: 
                     mensaje = "Sintax error: Error en el ; \n <FLOAT> <IDENTIFICADOR> = ' <FLOTANTE> ' ;"
                     mensajes.append(mensaje)
@@ -123,9 +191,14 @@ def condicion(tokens, i):
             i += 1                          #Avanzamos i a la siguiente posicion del arreglo de Tokens
             if llaveAbre(tokens, i):
                 i += 1                      #Avanzamos i a la siguiente posicion del arreglo de Tokens
+                i = instruccion(tokens, i)
+                i += 1
                 if llaveCierra(tokens, i):
-                    mensaje = "Syntax analysis completed with no errors \nProcess finished with exit code 0"
-                    mensajes.append(mensaje)
+                    if finPrograma(tokens, i):
+                        mensaje = "Syntax analysis completed with no errors \nProcess finished with exit code 0"
+                        mensajes.append(mensaje)
+                    else:
+                        return i
                 else:
                     mensaje = "Sintax error: Error en el '}' \n<CONDICION> -> if ( <COMPARACION> ) { <ORDENES> }"
                     mensajes.append(mensaje) 
