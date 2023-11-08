@@ -27,6 +27,8 @@ def instruccion(tokens, i):
         i = identificador(tokens, i, valor)            #Valida que sea un identificador
     elif tokens[i].type.value == 55:         #Valor definido en el lexico para el float
         i = palabraPrint(tokens, i)            #Valida que sea un identificador
+    elif llaveCierra(tokens, i):
+        return i
     else:
         mensaje = "Sintax error: Error instruccion invalida "
         mensajes.append(mensaje) 

@@ -1,0 +1,5 @@
+int main(){
+      if(num < 60){
+           print("Reprobado");
+      }
+}
