@@ -1,0 +1,4 @@
+void main (){
+    int num = 60;
+    float promedio;
+}
