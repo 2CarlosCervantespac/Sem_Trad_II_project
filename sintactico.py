@@ -1,3 +1,6 @@
+import semantico
+
+variables = []
 mensajes = []
 
 def finPrograma(tokens, i):
@@ -8,8 +11,6 @@ def finPrograma(tokens, i):
 def programa(tokens):
     i = 0
     funcion(tokens, i)
-    #while(not finPrograma(tokens, i)):
-    #    i = instruccion(tokens, i)
     print(i)
 
 #Crear una funcion
@@ -85,6 +86,8 @@ def tipo(tokens, i):
         if(tokens[i].type.value == 6):      #Valor definido en el lexico para el int
             i += 1
             if id(tokens, i):
+                vars = semantico.Variable(tokens[i].lexema, tokens[i-1].lexema, '')
+                variables.append(vars)
                 i += 1
                 if puntoComa(tokens, i):
                     i += 1
@@ -96,6 +99,18 @@ def tipo(tokens, i):
                             if puntoComa(tokens, i):
                                 i += 1
                                 return i
+                            else:
+                                mensaje = "Sintax error: Error en el ';' \n <FLOAT> <IDENTIFICADOR> = <VALOR_REAL>;"
+                                mensajes.append(mensaje)
+                                return None
+                    else:
+                        mensaje = "Sintax error: Error en el tipo \n <FLOAT> <IDENTIFICADOR> ;"
+                        mensajes.append(mensaje)
+                        return None
+                else:
+                    mensaje = "Sintax error: Error en el tipo \n <DECLARACION> -> <TIPO> <IDENTIFICADOR> ;"
+                    mensajes.append(mensaje)
+                    return None
             else:
                 mensaje = "Sintax error: Error en el tipo \n <DECLARACION> -> <TIPO> <IDENTIFICADOR> ;"
                 mensajes.append(mensaje)
@@ -114,14 +129,26 @@ def tipo(tokens, i):
                                 if puntoComa(tokens, i):
                                     i += 1
                                     return i
+                                else:
+                                    mensaje = "Sintax error: Error en el ';' \n <FLOAT> <IDENTIFICADOR> = <VALOR_REAL>;"
+                                    mensajes.append(mensaje)
+                                    return None
+                        else:
+                            mensaje = "Sintax error: Error en el valor \n <FLOAT> <IDENTIFICADOR> = <VALOR_REAL>;"
+                            mensajes.append(mensaje)
+                            return None
                     else:
-                        mensaje = "Sintax error: Error en el tipo \n <DECLARACION> -> <TIPO> <IDENTIFICADOR> ;"
+                        mensaje = "Sintax error: Error en el tipo \n <FLOAT> <IDENTIFICADOR> ;"
                         mensajes.append(mensaje)
                         return None
                 else:
                     mensaje = "Sintax error: Error en el tipo \n <DECLARACION> -> <TIPO> <IDENTIFICADOR> ;"
                     mensajes.append(mensaje)
                     return None
+        else:
+            mensaje = "Sintax error: Error en el tipo \n <DECLARACION> -> <TIPO> <IDENTIFICADOR> ;"
+            mensajes.append(mensaje)
+            return None
     except:
         mensaje = "Sintax error: Error en el tipo \n <DECLARACION> -> <TIPO> <IDENTIFICADOR> ;"
         mensajes.append(mensaje)
@@ -271,7 +298,7 @@ def simboloAsignacion(tokens, i):
     except:
         return False
     
-#Proceso de condicion
+#--------------- Proceso de condicion -------------------
 def condicion(tokens, i):
     if parantesisAbre(tokens, i):
         i += 1                              #Avanzamos i a la siguiente posicion del arreglo de Tokens
@@ -302,52 +329,6 @@ def condicion(tokens, i):
         mensaje = "Sintax error: Error en el '('  \n <CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
         mensajes.append(mensaje)
         
-
-def puntoComa(tokens, i):
-    try:
-        if tokens[i].type.value == 49:       #Valor definido en el lexico para el ;
-            return True
-        else:
-            return False
-    except:
-        return False
-
-def llaveAbre(tokens, i):
-    try:
-        if tokens[i].type.value == 42:          #Valor definido en el lexico para {
-            return True
-        else:
-            return False
-    except:
-        return False
-
-def llaveCierra(tokens, i):
-    try:
-        if tokens[i].type.value == 43:  # Valor definido en el léxico para }
-            return True
-        else:
-            return False
-    except:
-        return False
-
-def parantesisAbre(tokens, i):
-    try:
-        if tokens[i].type.value == 44:          #Valor definido en el lexico para (
-            return True
-        else:
-            return False
-    except:
-        return False
-
-def parentesisCierra(tokens, i):
-    try:
-        if tokens[i].type.value == 45:          #Valor definido en el lexico para )
-            return True
-        else:
-            return False
-    except:
-        return False
-
 def comparacion(tokens, i):
     i = operador(tokens, i)                     #Valida el operador
     if i == -1:
@@ -397,7 +378,52 @@ def opComparacion(tokens, i):
         return i
     else:
         return -1
+    
+#---------------------- Tokens comunes ----------------------------
+def puntoComa(tokens, i):
+    try:
+        if tokens[i].type.value == 49:       #Valor definido en el lexico para el ;
+            return True
+        else:
+            return False
+    except:
+        return False
 
+def llaveAbre(tokens, i):
+    try:
+        if tokens[i].type.value == 42:          #Valor definido en el lexico para {
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def llaveCierra(tokens, i):
+    try:
+        if tokens[i].type.value == 43:  # Valor definido en el léxico para }
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def parantesisAbre(tokens, i):
+    try:
+        if tokens[i].type.value == 44:          #Valor definido en el lexico para (
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def parentesisCierra(tokens, i):
+    try:
+        if tokens[i].type.value == 45:          #Valor definido en el lexico para )
+            return True
+        else:
+            return False
+    except:
+        return False
 
 def valorEntero(tokens, i):
     try:

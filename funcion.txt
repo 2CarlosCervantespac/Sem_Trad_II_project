@@ -1,0 +1,7 @@
+void main (){
+    int num = 60;
+    float promedio;
+    if(num < 60){
+	    print("Reprobaste");
+    }
+}
