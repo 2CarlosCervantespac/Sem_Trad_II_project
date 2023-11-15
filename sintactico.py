@@ -159,6 +159,7 @@ def instrucciones(tokens, i):
             i = instruccion(tokens, i)
             if i is None:           # i = None si hubo un error en la declaracion
                 break
+            i += 1
     return i
 
 def sig_instruccion(tokens, i):
