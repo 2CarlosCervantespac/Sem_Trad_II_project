@@ -271,6 +271,16 @@ def comparacion(tokens, i):
 
 def operador(tokens, i):
     if tokens[i].type.value == 50:              #Valor definido en el lexico para el identificador
+        var = buscarVar(tokens[i], vars)
+        if var is None:
+            mensaje = "Semantic error: Error en la variable, variable no declarada"
+            mensajes.append(mensaje)
+            return None
+        var = buscarValor(var)
+        if var is None:
+            mensaje = "Semantic error: Error en la variable, valor de la variable no definida"
+            mensajes.append(mensaje)
+            return None
         i += 1
         return i
     elif tokens[i].type.value == 51:            #Valor definido en el lexico para numeros enteros

@@ -1,4 +1,4 @@
-#from lexico import token_types, get_tokens
+from lexico import *
 
 class Variable:
 	def __init__(self, identificador, tipo, valor):
@@ -11,3 +11,16 @@ class Variable:
 	
 	def setId(self, identificador):
 		self.identificador = identificador
+
+def buscarVar(token, vars):
+	for var in vars:
+		print(var.identificador)
+		print(token.lexema)
+		if token.lexema == var.identificador:
+			return var
+	return None
+
+def buscarValor(var):
+	if var.valor is not '':
+		return var
+	return None
