@@ -21,7 +21,15 @@ class MainWindow(QMainWindow):
 
 
     def clickLexico(self):
+        # Obtén el texto del plainTextEdit
         input_text = self.ui.plainTextEdit.toPlainText()
+
+        # Verifica si el plainTextEdit está vacío
+        if not input_text.strip():
+            QMessageBox.warning(self, 'Texto vacío', 'No hay texto para analizar.')
+            return
+
+        # Obtiene los tokens
         self.tokens = get_tokens(input_text)
 
         # Limpia la tabla
@@ -38,15 +46,13 @@ class MainWindow(QMainWindow):
 
         row = 0
         for i, token in enumerate(self.tokens):
-
             self.ui.tableWidget.setItem(row, 0, QTableWidgetItem(token_types[token.type.value][1]))
             self.ui.tableWidget.setItem(row, 1, QTableWidgetItem(token.lexema))
             self.ui.tableWidget.setItem(row, 2, QTableWidgetItem(str(i + 1)))
-            
             row += 1
     
     def clickSintactico(self):
-        #mensajes.clear()  # Limpia los mensajes previos
+        mensajes.clear()  # Limpia los mensajes previos
         programa(self.tokens)
         self.ui.plainTextEdit_2.clear()
 
