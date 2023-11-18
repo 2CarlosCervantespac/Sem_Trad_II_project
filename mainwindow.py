@@ -15,10 +15,13 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_2.clicked.connect(self.clickSintactico)
         self.ui.actionOpen.triggered.connect(self.action_abrir_archivo)
         self.ui.actionSave.triggered.connect(self.action_guardar_archivo)
+        self.ui.pushButton_3.clicked.connect(self.clickDirecciones)
 
         self.ui.tableWidget.setColumnCount(3)
         self.ui.tableWidget.setHorizontalHeaderLabels(["Token", "Lexema", "#"])
 
+    def clickDirecciones(self):
+        return print("Direcciones")
 
     def clickLexico(self):
         # Obtén el texto del plainTextEdit

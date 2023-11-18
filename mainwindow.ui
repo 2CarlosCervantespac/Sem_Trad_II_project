@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>804</width>
-    <height>622</height>
+    <width>953</width>
+    <height>640</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,7 +15,7 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
+    <item row="0" column="1">
      <widget class="QWidget" name="widget" native="true">
       <property name="styleSheet">
        <string notr="true">QWidget{
@@ -77,11 +77,20 @@ background-color: rgb(186, 186, 186)
         </widget>
        </item>
        <item>
-        <widget class="QPlainTextEdit" name="plainTextEdit">
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(255, 255, 255);
+        <widget class="QWidget" name="widget_5" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QPlainTextEdit" name="plainTextEdit">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);
 font: 12pt &quot;Arial&quot;;</string>
-         </property>
+            </property>
+            <property name="placeholderText">
+             <string notr="true">Ingrese texto para analizar</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
        <item>
@@ -119,7 +128,7 @@ background-color: rgb(186, 186, 186)
              <string notr="true"/>
             </property>
             <property name="text">
-             <string>Analisis Lexico</string>
+             <string> Analisis Lexico </string>
             </property>
            </widget>
           </item>
@@ -137,14 +146,7 @@ background-color: rgb(186, 186, 186)
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_3">
-            <property name="text">
-             <string>Agregar</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer_4">
+           <spacer name="horizontalSpacer_8">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -162,12 +164,45 @@ background-color: rgb(186, 186, 186)
              <string notr="true"/>
             </property>
             <property name="text">
-             <string>Analisis Sintactico</string>
+             <string> Analisis Sintactico </string>
             </property>
            </widget>
           </item>
           <item>
            <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_3">
+            <property name="text">
+             <string> 3 Direcciones </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_7">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -206,6 +241,14 @@ font: 12pt &quot;Arial&quot;;</string>
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QPlainTextEdit" name="plainTextEdit_3">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);
+font: 12pt &quot;Arial&quot;;</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
@@ -219,7 +262,7 @@ font: 12pt &quot;Arial&quot;;</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>804</width>
+     <width>953</width>
      <height>22</height>
     </rect>
    </property>

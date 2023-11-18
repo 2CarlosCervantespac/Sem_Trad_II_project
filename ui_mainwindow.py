@@ -26,7 +26,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(804, 622)
+        MainWindow.resize(953, 640)
         self.actionOpen = QAction(MainWindow)
         self.actionOpen.setObjectName(u"actionOpen")
         self.actionSave = QAction(MainWindow)
@@ -76,12 +76,20 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addWidget(self.widget_2)
 
-        self.plainTextEdit = QPlainTextEdit(self.widget)
+        self.widget_5 = QWidget(self.widget)
+        self.widget_5.setObjectName(u"widget_5")
+        self.horizontalLayout_3 = QHBoxLayout(self.widget_5)
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.plainTextEdit = QPlainTextEdit(self.widget_5)
         self.plainTextEdit.setObjectName(u"plainTextEdit")
         self.plainTextEdit.setStyleSheet(u"background-color: rgb(255, 255, 255);\n"
 "font: 12pt \"Arial\";")
+        self.plainTextEdit.setPlaceholderText(u"Ingrese texto para analizar")
 
-        self.verticalLayout.addWidget(self.plainTextEdit)
+        self.horizontalLayout_3.addWidget(self.plainTextEdit)
+
+
+        self.verticalLayout.addWidget(self.widget_5)
 
         self.widget_3 = QWidget(self.widget)
         self.widget_3.setObjectName(u"widget_3")
@@ -112,14 +120,9 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout.addItem(self.horizontalSpacer)
 
-        self.pushButton_3 = QPushButton(self.widget_3)
-        self.pushButton_3.setObjectName(u"pushButton_3")
+        self.horizontalSpacer_8 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
-        self.horizontalLayout.addWidget(self.pushButton_3)
-
-        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.horizontalLayout.addItem(self.horizontalSpacer_4)
+        self.horizontalLayout.addItem(self.horizontalSpacer_8)
 
         self.pushButton_2 = QPushButton(self.widget_3)
         self.pushButton_2.setObjectName(u"pushButton_2")
@@ -130,6 +133,19 @@ class Ui_MainWindow(object):
         self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.horizontalLayout.addItem(self.horizontalSpacer_2)
+
+        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout.addItem(self.horizontalSpacer_4)
+
+        self.pushButton_3 = QPushButton(self.widget_3)
+        self.pushButton_3.setObjectName(u"pushButton_3")
+
+        self.horizontalLayout.addWidget(self.pushButton_3)
+
+        self.horizontalSpacer_7 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout.addItem(self.horizontalSpacer_7)
 
 
         self.verticalLayout.addWidget(self.widget_3)
@@ -155,16 +171,23 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_2.addWidget(self.plainTextEdit_2)
 
+        self.plainTextEdit_3 = QPlainTextEdit(self.widget_4)
+        self.plainTextEdit_3.setObjectName(u"plainTextEdit_3")
+        self.plainTextEdit_3.setStyleSheet(u"background-color: rgb(255, 255, 255);\n"
+"font: 12pt \"Arial\";")
+
+        self.horizontalLayout_2.addWidget(self.plainTextEdit_3)
+
 
         self.verticalLayout.addWidget(self.widget_4)
 
 
-        self.gridLayout.addWidget(self.widget, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.widget, 0, 1, 1, 1)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 804, 22))
+        self.menubar.setGeometry(QRect(0, 0, 953, 22))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
         MainWindow.setMenuBar(self.menubar)
@@ -192,9 +215,9 @@ class Ui_MainWindow(object):
         self.actionSave.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+S", None))
 #endif // QT_CONFIG(shortcut)
         self.label.setText(QCoreApplication.translate("MainWindow", u"Analizador", None))
-        self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Analisis Lexico", None))
-        self.pushButton_3.setText(QCoreApplication.translate("MainWindow", u"Agregar", None))
-        self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"Analisis Sintactico", None))
+        self.pushButton.setText(QCoreApplication.translate("MainWindow", u" Analisis Lexico ", None))
+        self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u" Analisis Sintactico ", None))
+        self.pushButton_3.setText(QCoreApplication.translate("MainWindow", u" 3 Direcciones ", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
     # retranslateUi
 
