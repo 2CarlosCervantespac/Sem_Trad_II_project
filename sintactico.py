@@ -4,7 +4,7 @@ vars = []
 mensajes = []
 
 def finPrograma(tokens, i):
-    if i+1 >= len(tokens):
+    if i+1 > len(tokens):
         return True
     return False
 
@@ -163,7 +163,7 @@ def instrucciones(tokens, i):
     return i
 
 def sig_instruccion(tokens, i):
-    if tokens[i].type.value == 14 or tokens[i].type.value == 55 or tokens[i].type.value == 10:  #Revisa si el token actual es una instruccion
+    if tokens[i].type.value == 14 or tokens[i].type.value == 55 or tokens[i].type.value == 10 or tokens[i].type.value == 50:  #Revisa si el token actual es una instruccion
         return True
     return False
 
@@ -176,14 +176,66 @@ def instruccion(tokens, i):
         i = bucle(tokens, i)
     elif tokens[i].type.value == 55:         #Valor definido en el lexico para el print
         i += 1
-        i = instruccionPrint(tokens, i)            #Valida que sea un identificador
+        i = instruccionPrint(tokens, i)            #Valida que sea un print
+    elif tokens[i].type.value == 50:              #Valor definido en el lexico para el identificador
+        i = asignacion(tokens, i)                   #Proceso de asignacion
     else:
         mensaje = "Sintax error: Error instruccion invalida "
         mensajes.append(mensaje) 
-    print(i)
     return i
 
-# -------- Instruccion print --------
+#------------------ Proceso de asinacion -----------------------
+def asignacion(tokens, i):
+    var = buscarVar(tokens[i], vars)
+    if var is None:
+        mensaje = "Semantic error: Error en la variable, variable no declarada"
+        mensajes.append(mensaje)
+        return None
+    i += 1
+    if not simboloAsignacion(tokens, i):
+        mensaje = "Sintax error: Error en el '=' \n<ASIGNAR> -> <IDENTIFICADOR> = <EXP_ARIT> ;"
+        mensajes.append(mensaje)
+        return None
+    i += 1
+    i = exprAritmetica(tokens, i)
+    if i is None:
+        return None
+    if not puntoComa(tokens, i):
+        mensaje = "Sintax error: Error en el ';' \n<ASIGNAR> -> <IDENTIFICADOR> = <EXP_ARIT> ;"
+        mensajes.append(mensaje)
+        return None
+    return i
+
+def exprAritmetica(tokens, i):
+    i = operador(tokens, i)                     #Valida el operador
+    if i is None:
+        return None
+    i = opArit(tokens, i)
+    if i is None:
+        return None
+    i = operador(tokens, i)
+    if i is None:
+        return None
+    return i
+
+def opArit(tokens, i):
+    if tokens[i].type.value == 15:              #Valida operadores validos ( +, -, *, /)
+        i += 1
+        return i
+    elif tokens[i].type.value == 16:
+        i += 1
+        return i
+    elif tokens[i].type.value == 21:
+        i += 1
+        return i
+    elif tokens[i].type.value == 22:
+        i += 1
+        return i
+    else:
+        mensaje = "Sintax error: Error en el 'operador aritmetico' <EXP_ARIT> -> <OPERADOR> <OP_ARITMETICO> <OPERADOR> "
+        mensajes.append(mensaje)
+        return None
+# -------- Instruccion print ----------
 def instruccionPrint(tokens, i):
     try:
         if not parantesisAbre(tokens, i):

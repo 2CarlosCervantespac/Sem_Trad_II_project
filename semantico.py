@@ -14,8 +14,6 @@ class Variable:
 
 def buscarVar(token, vars):
 	for var in vars:
-		print(var.identificador)
-		print(token.lexema)
 		if token.lexema == var.identificador:
 			return var
 	return None
