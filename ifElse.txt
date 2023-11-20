@@ -1,0 +1,10 @@
+void main (){
+    float calif1 = 60.5;
+    int califMinima = 60;
+    if(calif1 < califMinima){
+               print("Reprobaste");
+    }
+    else{
+           print("Aprobaste");
+    }
+}

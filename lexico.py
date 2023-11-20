@@ -58,6 +58,7 @@ class TokenType(Enum):
 	Cadena = 53
 	Desconocido = 54
 	PalabraReservadaPrint = 55
+	PalabraReservadaElse = 56
 
 class Token:
 	def __init__(self, type: TokenType, lexema: str, line: int):
@@ -125,6 +126,7 @@ token_types = [
 	('', 'Cadena'),
 	('', 'Desconocido'),
 	('print', 'Palabra reservada print'),
+ 	('else', 'Palabra reservada else'),
 ]
 
 # Determinar si un caracter es operador

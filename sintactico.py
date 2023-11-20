@@ -163,7 +163,7 @@ def instrucciones(tokens, i):
     return i
 
 def sig_instruccion(tokens, i):
-    if tokens[i].type.value == 14 or tokens[i].type.value == 55:  #Revisa si el token actual es una instruccion
+    if tokens[i].type.value == 14 or tokens[i].type.value == 55 or tokens[i].type.value == 10:  #Revisa si el token actual es una instruccion
         return True
     return False
 
@@ -171,6 +171,9 @@ def instruccion(tokens, i):
     if tokens[i].type.value == 14:          #Valor definido en el lexico para if
         i += 1                              #Avanzamos i a la siguiente posicion del arreglo de Tokens
         i = condicion(tokens, i)
+    elif tokens[i].type.value == 10:          #Valor definido en el lexico para while
+        i += 1                              #Avanzamos i a la siguiente posicion del arreglo de Tokens
+        i = bucle(tokens, i)
     elif tokens[i].type.value == 55:         #Valor definido en el lexico para el print
         i += 1
         i = instruccionPrint(tokens, i)            #Valida que sea un identificador
@@ -220,7 +223,40 @@ def cadena(tokens, i):
             return False
     except:
         return False
-    
+
+#--------------- Proceso de bucle -------------------
+def bucle(tokens, i):
+    if not parantesisAbre(tokens, i):
+        mensaje = "Sintax error: Error en el '('  \n <CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
+        mensajes.append(mensaje)
+        return None
+    i += 1                              #Avanzamos i a la siguiente posicion del arreglo de Tokens
+    i = comparacion(tokens, i)          #Reviso la comparacion
+    if i is None:
+        return None
+    if not parentesisCierra(tokens, i):
+        mensaje = "Sintax error: Error en el ')'  \n <CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
+        mensajes.append(mensaje)
+        return None
+    i += 1
+    if not llaveAbre(tokens, i):
+        mensaje = "Sintax error: Error en el '{'  \n <CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
+        mensajes.append(mensaje)
+        return None
+    i += 1
+    i = instrucciones(tokens, i)
+    if i is None:
+        return None
+    if not llaveCierra(tokens, i):
+        mensaje = "Sintax error: Error en el '{'  \n <CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
+        mensajes.append(mensaje)
+        return None
+    if finPrograma(tokens, i):
+        mensaje = "Sintax error: Error en el '}' \n<FUNCION> -> <TIPO> <IDENTIFICADOR> ( ) { <ORDENES> <INSTRUCCIONES> }"
+        mensajes.append(mensaje)
+        return None
+    else:
+        return i
 #--------------- Proceso de condicion -------------------
 def condicion(tokens, i):
     if not parantesisAbre(tokens, i):
@@ -241,13 +277,18 @@ def condicion(tokens, i):
         mensajes.append(mensaje)
         return None
     i += 1
-    i = instruccion(tokens, i)
+    i = instrucciones(tokens, i)
     if i is None:
         return None
-    i += 1
     if not llaveCierra(tokens, i):
         mensaje = "Sintax error: Error en el '{'  \n <CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
         mensajes.append(mensaje)
+        return None
+    i += 1
+    if palabraElse(tokens, i):
+        i += 1
+        i = condicionElse(tokens, i)
+    if i is None:
         return None
     if finPrograma(tokens, i):
         mensaje = "Sintax error: Error en el '}' \n<FUNCION> -> <TIPO> <IDENTIFICADOR> ( ) { <ORDENES> <INSTRUCCIONES> }"
@@ -256,6 +297,21 @@ def condicion(tokens, i):
     else:
         return i
 
+#---------------- Proceso de else -----------------
+def condicionElse(tokens, i):
+    if not llaveAbre(tokens, i):
+        mensaje = "Sintax error: Error en el '{'  \n <ELSE> -> else { <ORDENES> } "
+        mensajes.append(mensaje)
+        return None
+    i += 1
+    i = instrucciones(tokens, i)
+    if i is None:
+        return None
+    if not llaveCierra(tokens, i):
+        mensaje = "Sintax error: Error en el '}'  \n <ELSE> -> else { <ORDENES> } "
+        mensajes.append(mensaje)
+        return None
+    return i
 #---------------- Proceso de comparacion -----------------
 def comparacion(tokens, i):
     i = operador(tokens, i)                     #Valida el operador
@@ -314,6 +370,15 @@ def opComparacion(tokens, i):
         mensaje = "Sintax error: Error en el 'operador de comparacion' <COMPARACION> -> <OPERADOR> <OP_COMPARACION> <OPERADOR> "
         mensajes.append(mensaje)
         return None
+
+def palabraElse(tokens, i):
+    try:
+        if tokens[i].type.value == 56:       #Valor definido en el lexico para el ;
+            return True
+        else:
+            return False
+    except:
+        return False
 
 #---------------------- Tokens comunes ----------------------------
 def puntoComa(tokens, i):
