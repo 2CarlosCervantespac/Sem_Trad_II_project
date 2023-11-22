@@ -1,0 +1,12 @@
+void main (){
+    int i = 0;
+    while (i < 10){
+         if(i < 5){
+             print("i es menor que 5");
+         }
+         else{
+            print("i es mayor que 5");
+         }
+         i = i + 1;
+    }
+}

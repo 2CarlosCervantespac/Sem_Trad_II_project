@@ -1,7 +1,9 @@
 from semantico import *
+import cod3direcciones as cod3Dir
 
 vars = []
 mensajes = []
+codigo = ''
 
 def finPrograma(tokens, i):
     if i+1 > len(tokens):
@@ -13,11 +15,11 @@ def programa(tokens):
     vars.clear()
     mensajes.clear()
     funcion(tokens, i)
-    print(i)
+    print(codigo)
 
 #Crear una funcion
 def funcion(tokens, i):    
-    if tokens[i].type.value is not 3:         #Valor definido en el lexico para el void
+    if tokens[i].type.value != 3:         #Valor definido en el lexico para el void
         mensaje = "Sintax error: Error en el 'tipo' \n<FUNCION> -> <TIPO> <IDENTIFICADOR> ( ) { <ORDENES> <INSTRUCCIONES> }"
         mensajes.append(mensaje)
         return None
@@ -76,6 +78,8 @@ def declaraciones(tokens, i):
             if validVar(tokens, i, var):
                 i += 1
                 if puntoComa(tokens, i):
+                    global codigo
+                    codigo = cod3Dir.declaraciones(var.identificador, var.valor, codigo)
                     i += 1
                 else:
                     mensaje = "Sintax error: Error en el ';' \n<TIPO_INT> <IDENTIFICADOR> = <VALOR_ENTERO> ;"
