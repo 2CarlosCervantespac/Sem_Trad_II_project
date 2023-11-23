@@ -373,12 +373,16 @@ def comparacion(tokens, i):
     i = operador(tokens, i)                     #Valida el operador
     if i is None:
         return None
+    var = tokens[i-1].lexema
     i = opComparacion(tokens, i)
     if i is None:
         return None
+    opCom = tokens[i-1].lexema
     i = operador(tokens, i)
     if i is None:
         return None
+    var1 = tokens[i-1].lexema
+    cod3Dir.bucleWhile(var, var1, opCom, codigo)
     return i
 
 def operador(tokens, i):
