@@ -21,7 +21,15 @@ class MainWindow(QMainWindow):
         self.ui.tableWidget.setHorizontalHeaderLabels(["Token", "Lexema", "#"])
 
     def clickDirecciones(self):
-        return print("Direcciones")
+        mensajes.clear()  # Limpia los mensajes previos
+        programa(self.tokens)
+        self.ui.plainTextEdit_3.clear()
+
+        # Concatena todos los mensajes en una cadena
+        mensajes_completos = "\n".join(mensajes)
+        self.ui.plainTextEdit_3.insertPlainText(mensajes_completos)
+        print(mensajes_completos)
+        print(mensajes)
 
     def clickLexico(self):
         # Obtén el texto del plainTextEdit
