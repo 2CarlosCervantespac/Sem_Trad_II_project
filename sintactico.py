@@ -15,7 +15,7 @@ def programa(tokens):
     mensajes.clear()
     i = funcion(tokens, i)
     if i != None:
-        lineas = cod3Dir.showLineas()
+        codigo = cod3Dir.showLineas()
 
 #Crear una funcion
 def funcion(tokens, i):    
@@ -55,6 +55,7 @@ def funcion(tokens, i):
         mensajes.append(mensaje)
         return None
     i += 1
+    cod3Dir.fin()
     if finPrograma(tokens, i):
         mensaje = "Syntax analysis completed with no errors \nProcess finished with exit code 0"
         mensajes.append(mensaje)
@@ -285,12 +286,14 @@ def cadena(tokens, i):
 
 #--------------- Proceso de bucle -------------------
 def bucle(tokens, i):
+    lineas = []        
     if not parantesisAbre(tokens, i):
         mensaje = "Sintax error: Error en el '('  \n <CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
         mensajes.append(mensaje)
         return None
     i += 1                              #Avanzamos i a la siguiente posicion del arreglo de Tokens
-    i = comparacion(tokens, i)          #Reviso la comparacion
+    i = comparacion(tokens, i, lineas)          #Reviso la comparacion
+    print(lineas)
     if i is None:
         return None
     if not parentesisCierra(tokens, i):
@@ -310,6 +313,7 @@ def bucle(tokens, i):
         mensaje = "Sintax error: Error en el '{'  \n <CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
         mensajes.append(mensaje)
         return None
+    cod3Dir.cerraBucle(lineas)
     if finPrograma(tokens, i):
         mensaje = "Sintax error: Error en el '}' \n<FUNCION> -> <TIPO> <IDENTIFICADOR> ( ) { <ORDENES> <INSTRUCCIONES> }"
         mensajes.append(mensaje)
@@ -318,12 +322,13 @@ def bucle(tokens, i):
         return i
 #--------------- Proceso de condicion -------------------
 def condicion(tokens, i):
+    lineas = []
     if not parantesisAbre(tokens, i):
         mensaje = "Sintax error: Error en el '('  \n <CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
         mensajes.append(mensaje)
         return None
     i += 1                              #Avanzamos i a la siguiente posicion del arreglo de Tokens
-    i = comparacion(tokens, i)          #Reviso la comparacion
+    i = comparacion(tokens, i, lineas)          #Reviso la comparacion
     if i is None:
         return None
     if not parentesisCierra(tokens, i):
@@ -372,7 +377,7 @@ def condicionElse(tokens, i):
         return None
     return i
 #---------------- Proceso de comparacion -----------------
-def comparacion(tokens, i):
+def comparacion(tokens, i, lineas):
     i = operador(tokens, i)                     #Valida el operador
     if i is None:
         return None
@@ -385,7 +390,8 @@ def comparacion(tokens, i):
     if i is None:
         return None
     var1 = tokens[i-1].lexema
-    cod3Dir.saltoWhile(var, var1, opCom)
+    num = cod3Dir.saltoWhile(var, var1, opCom)
+    lineas.append(num)
     return i
 
 def operador(tokens, i):
