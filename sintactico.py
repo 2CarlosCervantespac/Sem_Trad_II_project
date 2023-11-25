@@ -3,7 +3,6 @@ import cod3direcciones as cod3Dir
 
 vars = []
 mensajes = []
-codigo = ''
 
 def finPrograma(tokens, i):
     if i+1 > len(tokens):
@@ -14,8 +13,9 @@ def programa(tokens):
     i = 0
     vars.clear()
     mensajes.clear()
-    funcion(tokens, i)
-    print(codigo)
+    i = funcion(tokens, i)
+    if i != None:
+        lineas = cod3Dir.showLineas()
 
 #Crear una funcion
 def funcion(tokens, i):    
@@ -78,8 +78,7 @@ def declaraciones(tokens, i):
             if validVar(tokens, i, var):
                 i += 1
                 if puntoComa(tokens, i):
-                    global codigo
-                    codigo = cod3Dir.declaraciones(var.identificador, var.valor, codigo)
+                    cod3Dir.declaraciones(var.identificador, var.valor)
                     i += 1
                 else:
                     mensaje = "Sintax error: Error en el ';' \n<TIPO_INT> <IDENTIFICADOR> = <VALOR_ENTERO> ;"
@@ -201,7 +200,7 @@ def asignacion(tokens, i):
         mensajes.append(mensaje)
         return None
     i += 1
-    i = exprAritmetica(tokens, i)
+    i = exprAritmetica(tokens, i, var)
     if i is None:
         return None
     if not puntoComa(tokens, i):
@@ -210,16 +209,20 @@ def asignacion(tokens, i):
         return None
     return i
 
-def exprAritmetica(tokens, i):
+def exprAritmetica(tokens, i, var):
     i = operador(tokens, i)                     #Valida el operador
     if i is None:
         return None
+    var1 = tokens[i-1].lexema
     i = opArit(tokens, i)
     if i is None:
         return None
+    opeArit = tokens[i-1].lexema
     i = operador(tokens, i)
     if i is None:
         return None
+    var2 = tokens[i-1].lexema
+    cod3Dir.asignacionArit(var.identificador, var1, var2, opeArit)
     return i
 
 def opArit(tokens, i):
@@ -373,12 +376,16 @@ def comparacion(tokens, i):
     i = operador(tokens, i)                     #Valida el operador
     if i is None:
         return None
+    var = tokens[i-1].lexema
     i = opComparacion(tokens, i)
     if i is None:
         return None
+    opCom = tokens[i-1].lexema
     i = operador(tokens, i)
     if i is None:
         return None
+    var1 = tokens[i-1].lexema
+    cod3Dir.saltoWhile(var, var1, opCom)
     return i
 
 def operador(tokens, i):
