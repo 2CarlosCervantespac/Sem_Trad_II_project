@@ -52,4 +52,5 @@ def fin():
 def showLineas():
     for linea in lineas:
         print(linea)
-    return lineas
+        return lineas
+

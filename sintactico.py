@@ -17,6 +17,7 @@ def programa(tokens):
     i = funcion(tokens, i)
     if i != None:
         codigo = cod3Dir.showLineas()
+        return codigo
 
 #Crear una funcion
 def funcion(tokens, i):    

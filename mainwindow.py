@@ -3,6 +3,8 @@ from PySide6.QtGui import *
 from ui_mainwindow import Ui_MainWindow
 from lexico import token_types, get_tokens
 from sintactico import programa, mensajes
+import sys
+from io import StringIO
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -19,9 +21,23 @@ class MainWindow(QMainWindow):
 
         self.ui.tableWidget.setColumnCount(3)
         self.ui.tableWidget.setHorizontalHeaderLabels(["Token", "Lexema", "#"])
+        # Crear un buffer para redirigir la salida estándar
+        self.stdout_buffer = StringIO()
+        # Redirigir la salida estándar al buffer
+        sys.stdout = self.stdout_buffer
+
+    def restore_stdout(self):
+        # Restaurar la salida estándar original
+        sys.stdout = sys.__stdout__
 
     def clickDirecciones(self):
-        return print("Direcciones")
+        mensajes.clear()  # Limpia los mensajes previos
+        codigo = programa(self.tokens)
+        self.ui.plainTextEdit_3.clear()
+
+        if codigo:
+            for linea in codigo:
+                self.ui.plainTextEdit_3.insertPlainText(linea + "\n")
 
     def clickLexico(self):
         # Obtén el texto del plainTextEdit

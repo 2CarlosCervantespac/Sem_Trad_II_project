@@ -19,6 +19,6 @@ def buscarVar(token, vars):
 	return None
 
 def buscarValor(var):
-	if var.valor is not '':
+	if var.valor != '':
 		return var
 	return None
