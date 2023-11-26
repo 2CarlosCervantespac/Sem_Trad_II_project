@@ -38,6 +38,12 @@ def cerrarIf(filas):
     id = filas[0]               #Linea donde se creo el if
     lineas[id] += str(num)
 
+def saltoElse():
+    num = len(lineas)
+    cadena = str(num) + ': goto '
+    lineas.append(cadena)
+    return num
+
 def fin():
     num = len(lineas)
     cadena = str(num) + ': '

@@ -364,6 +364,9 @@ def condicion(tokens, i):
 
 #---------------- Proceso de else -----------------
 def condicionElse(tokens, i):
+    linea = []
+    num = cod3Dir.saltoElse()
+    linea.append(num)
     if not llaveAbre(tokens, i):
         mensaje = "Sintax error: Error en el '{'  \n <ELSE> -> else { <ORDENES> } "
         mensajes.append(mensaje)
