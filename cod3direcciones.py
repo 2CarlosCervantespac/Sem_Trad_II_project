@@ -44,6 +44,10 @@ def saltoElse():
     lineas.append(cadena)
     return num
 
+def cerrarElse(num):
+    ultimaInstruccion = len(lineas)
+    lineas[num] += str(ultimaInstruccion)
+
 def fin():
     num = len(lineas)
     cadena = str(num) + ': '

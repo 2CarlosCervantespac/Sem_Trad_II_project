@@ -324,6 +324,7 @@ def bucle(tokens, i):
         return i
 #--------------- Proceso de condicion -------------------
 def condicion(tokens, i):
+    existElse = False
     lineas = []
     if not parantesisAbre(tokens, i):
         mensaje = "Sintax error: Error en el '('  \n <CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
@@ -350,12 +351,16 @@ def condicion(tokens, i):
         mensaje = "Sintax error: Error en el '{'  \n <CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
         mensajes.append(mensaje)
         return None
-    cod3Dir.cerrarIf(lineas)#Cierre de 3 direcciones
     if palabraElse(tokens, i+1):
         i += 2
-        i = condicionElse(tokens, i)
+        existElse = True
+        num = cod3Dir.saltoElse()       #Numero del la linea del salto en 3 direcciones
+        cod3Dir.cerrarIf(lineas)        #Cierre del if de 3 direcciones
+        i = condicionElse(tokens, i,num)
     if i is None:
         return None
+    if not existElse:
+        cod3Dir.cerrarIf(lineas)        #Cierre del if de 3 direcciones
     if finPrograma(tokens, i):
         mensaje = "Sintax error: Error en el '}' \n<FUNCION> -> <TIPO> <IDENTIFICADOR> ( ) { <ORDENES> <INSTRUCCIONES> }"
         mensajes.append(mensaje)
@@ -364,10 +369,7 @@ def condicion(tokens, i):
         return i
 
 #---------------- Proceso de else -----------------
-def condicionElse(tokens, i):
-    linea = []
-    num = cod3Dir.saltoElse()
-    linea.append(num)
+def condicionElse(tokens, i ,numLinea):
     if not llaveAbre(tokens, i):
         mensaje = "Sintax error: Error en el '{'  \n <ELSE> -> else { <ORDENES> } "
         mensajes.append(mensaje)
@@ -380,6 +382,7 @@ def condicionElse(tokens, i):
         mensaje = "Sintax error: Error en el '}'  \n <ELSE> -> else { <ORDENES> } "
         mensajes.append(mensaje)
         return None
+    cod3Dir.cerrarElse(numLinea)
     return i
 #---------------- Proceso de comparacion -----------------
 def comparacion(tokens, i, lineas):
