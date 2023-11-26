@@ -13,6 +13,7 @@ def programa(tokens):
     i = 0
     vars.clear()
     mensajes.clear()
+    cod3Dir.reiniciarLineas()
     i = funcion(tokens, i)
     if i != None:
         codigo = cod3Dir.showLineas()
@@ -313,7 +314,7 @@ def bucle(tokens, i):
         mensaje = "Sintax error: Error en el '{'  \n <CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
         mensajes.append(mensaje)
         return None
-    cod3Dir.cerraBucle(lineas)
+    cod3Dir.cerrarBucle(lineas)
     if finPrograma(tokens, i):
         mensaje = "Sintax error: Error en el '}' \n<FUNCION> -> <TIPO> <IDENTIFICADOR> ( ) { <ORDENES> <INSTRUCCIONES> }"
         mensajes.append(mensaje)
@@ -348,9 +349,9 @@ def condicion(tokens, i):
         mensaje = "Sintax error: Error en el '{'  \n <CONDICION> -> if ( <COMPARACION> ) { <ORDENES> } "
         mensajes.append(mensaje)
         return None
-    i += 1
-    if palabraElse(tokens, i):
-        i += 1
+    cod3Dir.cerrarIf(lineas)#Cierre de 3 direcciones
+    if palabraElse(tokens, i+1):
+        i += 2
         i = condicionElse(tokens, i)
     if i is None:
         return None

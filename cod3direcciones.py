@@ -1,5 +1,8 @@
 lineas = []
 
+def reiniciarLineas():
+    lineas.clear()
+
 def declaraciones(var, valor):
     num = len(lineas)
     cadena = str(num) + ': ' + var + ' = ' + valor
@@ -23,12 +26,17 @@ def asignacionArit(var, var1, var2, opArit):
         cadena = str(num) + ': ' + var + ' = ' + var1 + ' ' + opArit + ' ' + var2
         lineas.append(cadena)
 
-def cerraBucle(filas):
+def cerrarBucle(filas):
     num = len(lineas)
-    id = filas[0]
+    id = filas[0]               #Linea donde se creo el if
     cadena = str(num) + ': goto ' + str(id)
     lineas.append(cadena)
     lineas[id] += str(num +1)
+    
+def cerrarIf(filas):
+    num = len(lineas)
+    id = filas[0]               #Linea donde se creo el if
+    lineas[id] += str(num)
 
 def fin():
     num = len(lineas)
