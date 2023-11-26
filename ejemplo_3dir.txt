@@ -1,0 +1,12 @@
+void main (){
+    int a = 12;
+    int b = 10;
+    if(a > b){
+            a = 10 + 0;
+    }
+    else{
+           while(b < a){
+                b = b + 1;
+           }
+    }
+}
