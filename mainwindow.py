@@ -32,11 +32,11 @@ class MainWindow(QMainWindow):
 
     def clickDirecciones(self):
         mensajes.clear()  # Limpia los mensajes previos
-        lineas = programa(self.tokens)
+        codigo = programa(self.tokens)
         self.ui.plainTextEdit_3.clear()
 
-        if lineas:
-            for linea in lineas:
+        if codigo:
+            for linea in codigo:
                 self.ui.plainTextEdit_3.insertPlainText(linea + "\n")
 
     def clickLexico(self):
